@@ -1,8 +1,10 @@
 package com.example.footballapp2.data.repository
 
+import android.util.Log
 import com.example.footballapp2.data.dao.CountryDao
 import com.example.footballapp2.data.entity.Country
 import com.example.footballapp2.data.remote.FootballApiService
+import com.example.footballapp2.util.LogHelper.TAG_REPO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -14,19 +16,38 @@ class FootballRepository(
     suspend fun fetchAndSaveCountries() {
         withContext(Dispatchers.IO) {
             val response = apiService.getCountries()
+            //Log.d(TAG_REPO, "API Response: $response")
+
             if (response.isSuccessful) {
-                response.body()?.response?.let { countryResponseList ->
-                    // Mapeia CountryResponse para Country
-                    val countries = countryResponseList.map { country ->
-                        Country(
-                            name = country.name,
-                            code = country.code,
-                            flag = country.flag
-                        )
+                response.body()?.response?.let { countryList ->
+                    //Log.d(TAG_REPO, "Country List from Response: $countryList")
+
+                    try {
+                        // Mapeia e loga cada item da lista de países
+                        val countries = countryList.map { countryResponse ->
+                            //Log.d(TAG_REPO, "Mapping Country: $countryResponse")
+                            Country(
+                                name = countryResponse.name,
+                                code = countryResponse.code,
+                                flag = countryResponse.flag
+                            )
+                        }
+                        //Log.d(TAG_REPO, "Mapped Countries: $countries")
+
+                        // Insere os dados no banco
+                        countryDao.insertAll(countries)
+                        //Log.d(TAG_REPO, "Data inserted into DB successfully.")
+
+                    } catch (e: Exception) {
+                        //Log.e(TAG_REPO, "Error mapping countries: ${e.message}")
+                        throw Exception("Erro ao mapear os países: ${e.message}")
                     }
-                    countryDao.insertAll(countries)
+                } ?: run {
+                    //Log.e(TAG_REPO, "Resposta vazia ou não no formato esperado.")
+                    throw Exception("Resposta vazia ou não no formato esperado.")
                 }
             } else {
+                //Log.e(TAG_REPO, "Erro na resposta da API: ${response.message()}")
                 throw Exception("Erro na resposta da API: ${response.message()}")
             }
         }

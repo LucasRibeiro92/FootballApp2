@@ -1,3 +1,5 @@
 /build
-/main/java/com/example/footballapp2/util/ApiHelper.kt
-/main/java/com/example/footballapp2/util/DBHelper.kt
+/src/main/java/com/example/footballapp2/util/ApiHelper.kt
+/src/main/java/com/example/footballapp2/util/DBHelper.kt
+/src/main/java/com/example/footballapp2/util/LogHelper.kt
+/google-services.json

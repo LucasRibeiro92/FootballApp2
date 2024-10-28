@@ -8,7 +8,7 @@ import com.example.footballapp2.data.dao.CountryDao
 import com.example.footballapp2.data.entity.Country
 import com.example.footballapp2.util.DBHelper.FOOTBALL_DATABASE
 
-@Database(entities = [Country::class], version = 1)
+@Database(entities = [Country::class], version = 2)
 abstract class FootballDatabase : RoomDatabase() {
 
     abstract fun countryDao(): CountryDao

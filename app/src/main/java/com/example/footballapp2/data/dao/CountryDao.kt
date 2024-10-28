@@ -18,5 +18,4 @@ interface CountryDao {
 
     @Query("SELECT * FROM $COUNTRY_TABLE")
     fun getAllCountries(): List<Country>
-
 }

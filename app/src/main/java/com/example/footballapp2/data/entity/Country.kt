@@ -7,6 +7,10 @@ import com.example.footballapp2.util.DBHelper.COUNTRY_TABLE
 @Entity(tableName = COUNTRY_TABLE)
 data class Country(
     @PrimaryKey val name: String,
-    val code: String,
-    val flag: String
+    val code: String? = "No code",
+    val flag: String? = "No flag"
+)
+
+data class CountryResponse(
+    val response: List<Country>
 )
